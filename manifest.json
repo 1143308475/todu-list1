@@ -1,0 +1,13 @@
+{
+  "name": "我的计划与打卡",
+  "short_name": "计划打卡",
+  "description": "一个简单、清爽的个人待办清单",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f8f4",
+  "theme_color": "#2b8a68",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

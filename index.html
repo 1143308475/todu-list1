@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的计划与打卡</title>
+    <meta name="theme-color" content="#2b8a68" />
+    <meta name="description" content="待办清单与习惯打卡工具" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand-mark"><span>✦</span> PLAN SPACE</div>
+        <nav class="main-nav" aria-label="主导航">
+          <button class="nav-btn active" data-view="todoView" type="button">待办清单</button>
+          <button class="nav-btn" data-view="habitView" type="button">打卡中心</button>
+        </nav>
+      </header>
+
+      <section id="todoView" class="app-view">
+        <section class="hero">
+          <div>
+            <p class="eyebrow">PERSONAL PLANNER</p>
+            <h1>我的待办清单<span>。</span></h1>
+            <p class="subtitle">把想完成的事情写下来，一件一件完成。</p>
+          </div>
+          <div class="progress-card" aria-label="完成进度">
+            <div class="progress-top"><span>完成进度</span><strong id="progressText">0%</strong></div>
+            <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+            <small id="progressCount">0 / 0 已完成</small>
+          </div>
+        </section>
+        <section class="composer card">
+          <form id="todoForm">
+            <label class="input-wrap title-input"><span class="sr-only">计划内容</span><input id="todoTitle" type="text" maxlength="120" placeholder="接下来想完成什么？" autocomplete="off" required /></label>
+            <label class="input-wrap date-input"><span class="calendar-icon">▣</span><span class="sr-only">结束时间</span><input id="todoDue" type="datetime-local" /></label>
+            <button class="primary-btn" type="submit"><span>＋</span> 添加计划</button>
+          </form>
+        </section>
+        <section class="toolbar">
+          <div class="tabs" role="tablist" aria-label="计划筛选">
+            <button class="tab active" data-filter="all" role="tab" type="button">全部 <span id="allCount">0</span></button>
+            <button class="tab" data-filter="active" role="tab" type="button">进行中 <span id="activeCount">0</span></button>
+            <button class="tab" data-filter="completed" role="tab" type="button">已完成 <span id="completedCount">0</span></button>
+          </div>
+          <button id="clearCompleted" class="text-btn" type="button">清除已完成</button>
+        </section>
+        <section id="todoList" class="todo-list" aria-live="polite"></section>
+        <section id="emptyState" class="empty-state card" hidden>
+          <div class="empty-icon">✦</div><h2 id="emptyTitle">还没有计划</h2><p id="emptyMessage">先添加一件想完成的事情吧。</p>
+        </section>
+      </section>
+
+      <section id="habitView" class="app-view" hidden>
+        <section class="section-intro">
+          <div><p class="eyebrow">DAILY CHECK-IN</p><h1>打卡中心<span>。</span></h1><p class="subtitle">把想坚持的事情变成可见的节奏。</p></div>
+          <button id="addHabitButton" class="primary-btn" type="button"><span>＋</span> 新建打卡项</button>
+        </section>
+        <section class="habit-layout">
+          <div>
+            <div class="section-heading"><h2>我的打卡项</h2><span id="habitCountLabel">0 项</span></div>
+            <section id="habitList" class="habit-list" aria-live="polite"></section>
+            <section id="habitEmpty" class="empty-state card"><div class="empty-icon">✦</div><h2>还没有打卡项</h2><p>新建一个想坚持的目标，今天就开始。</p></section>
+          </div>
+          <section class="calendar-panel card" aria-label="打卡频次日历">
+            <div class="calendar-panel-head"><div><p class="eyebrow">FREQUENCY CALENDAR</p><h2 id="calendarTitle">选择一个打卡项</h2></div><span id="calendarRange">最近一年</span></div>
+            <div id="calendarEmpty" class="calendar-empty"><span>◌</span><p>选择左侧打卡项后，这里会显示每天的打卡频次。</p></div>
+            <div id="calendarContent" hidden>
+              <div class="calendar-stats"><div><strong id="calendarTotal">0</strong><span>累计次数</span></div><div><strong id="calendarRecent">0</strong><span>近 30 天</span></div><div><strong id="calendarGoal">—</strong><span>目标进度</span></div></div>
+              <div class="heatmap-scroll"><div class="weekday-labels"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div id="heatmap" class="heatmap" role="img" aria-label="按天显示的打卡频次"></div></div>
+              <div class="heatmap-legend"><span>少</span><i class="level-0"></i><i class="level-1"></i><i class="level-2"></i><i class="level-3"></i><i class="level-4"></i><span>多</span></div>
+              <p id="calendarHint" class="calendar-hint"></p>
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <footer>数据只保存在当前浏览器中 · 待办与打卡数据彼此独立</footer>
+    </main>
+
+    <template id="todoTemplate"><article class="todo-item card"><button class="check-btn" type="button" aria-label="标记完成"><span>✓</span></button><div class="todo-content"><div class="todo-title-row"><h3></h3><span class="status-pill"></span></div><p class="due-date"></p></div><div class="item-actions"><button class="icon-btn edit-btn" type="button" aria-label="编辑">✎</button><button class="icon-btn delete-btn" type="button" aria-label="删除">⌫</button></div></article></template>
+
+    <template id="habitTemplate"><article class="habit-item card"><div class="habit-item-top"><button class="habit-select" type="button"><span class="habit-dot">✦</span><span class="habit-name"></span></button><div class="item-actions"><button class="icon-btn habit-edit" type="button" aria-label="编辑打卡项">✎</button><button class="icon-btn habit-delete" type="button" aria-label="删除打卡项">⌫</button></div></div><div class="habit-meta"><span class="mode-label"></span><span class="updated-label"></span></div><div class="habit-progress"><div class="habit-progress-top"><span class="goal-label"></span><strong class="goal-percent"></strong></div><div class="progress-track"><div class="habit-progress-bar"></div></div></div><div class="habit-actions"><span class="today-label"></span><button class="checkin-btn" type="button">今日打卡</button></div></article></template>
+
+    <dialog id="habitDialog" class="edit-dialog habit-dialog">
+      <form id="habitForm"><p class="eyebrow" id="habitDialogEyebrow">NEW CHECK-IN</p><h2 id="habitDialogTitle">新建打卡项</h2><label class="edit-label" for="habitName">打卡内容</label><input id="habitName" class="edit-field" type="text" maxlength="60" placeholder="例如：阅读 30 分钟" required /><div class="form-two-col"><div><label class="edit-label" for="habitMode">打卡频次</label><select id="habitMode" class="edit-field"><option value="single">每天一次</option><option value="multiple">每天可多次</option></select></div><div><label class="edit-label" for="habitGoalType">目标单位</label><select id="habitGoalType" class="edit-field"><option value="days">累计天数</option><option value="count">累计次数</option></select></div></div><label class="edit-label" for="habitGoalTarget">目标数值 <span>可随时修改</span></label><input id="habitGoalTarget" class="edit-field" type="number" min="1" max="99999" step="1" value="30" required /><p id="habitDialogNote" class="dialog-note">完成目标后仍可继续打卡，目标不会自动结束。</p><div class="dialog-actions"><button id="cancelHabit" class="cancel-btn" type="button">取消</button><button class="primary-btn" type="submit">保存打卡项</button></div></form>
+    </dialog>
+    <dialog id="editDialog" class="edit-dialog"><form id="editForm"><p class="eyebrow">EDIT PLAN</p><h2>编辑计划</h2><label class="edit-label" for="editTitle">计划内容</label><input id="editTitle" class="edit-field" type="text" maxlength="120" required /><label class="edit-label" for="editDue">结束时间 <span>选填</span></label><input id="editDue" class="edit-field" type="datetime-local" /><div class="dialog-actions"><button id="cancelEdit" class="cancel-btn" type="button">取消</button><button class="primary-btn" type="submit">保存修改</button></div></form></dialog>
+    <script src="app.js"></script><script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));</script>
+  </body>
+</html>
